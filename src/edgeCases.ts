@@ -59,10 +59,14 @@ export const mapModuleNameToModule = (moduleSpecifier: string) => {
 	];
 
 	if (
-		moduleSpecifier.indexOf("node:") === 0 ||
+		moduleSpecifier.startsWith("node:") ||
 		builtInNodeMods.includes(moduleSpecifier)
 	) {
 		return "node";
+	}
+
+	if (moduleSpecifier.startsWith("npm:")) {
+		moduleSpecifier = moduleSpecifier.slice("npm:".length);
 	}
 
 	// strip module filepath e.g. lodash/identity => lodash

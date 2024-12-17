@@ -4,25 +4,256 @@ exports[`ata > non-prefixed lodash acquisition 1`] = `
 {
   "displayParts": [
     {
-      "kind": "keyword",
-      "text": "module",
+      "kind": "punctuation",
+      "text": "(",
+    },
+    {
+      "kind": "text",
+      "text": "alias",
+    },
+    {
+      "kind": "punctuation",
+      "text": ")",
     },
     {
       "kind": "space",
       "text": " ",
     },
     {
-      "kind": "stringLiteral",
-      "text": ""/node_modules/@types/lodash/index"",
+      "kind": "punctuation",
+      "text": "(",
+    },
+    {
+      "kind": "text",
+      "text": "method",
+    },
+    {
+      "kind": "punctuation",
+      "text": ")",
+    },
+    {
+      "kind": "space",
+      "text": " ",
+    },
+    {
+      "kind": "aliasName",
+      "text": "dropWhile",
+    },
+    {
+      "kind": "punctuation",
+      "text": "<",
+    },
+    {
+      "kind": "typeParameterName",
+      "text": "T",
+    },
+    {
+      "kind": "punctuation",
+      "text": ">",
+    },
+    {
+      "kind": "punctuation",
+      "text": "(",
+    },
+    {
+      "kind": "parameterName",
+      "text": "array",
+    },
+    {
+      "kind": "punctuation",
+      "text": ":",
+    },
+    {
+      "kind": "space",
+      "text": " ",
+    },
+    {
+      "kind": "aliasName",
+      "text": "List",
+    },
+    {
+      "kind": "punctuation",
+      "text": "<",
+    },
+    {
+      "kind": "typeParameterName",
+      "text": "T",
+    },
+    {
+      "kind": "punctuation",
+      "text": ">",
+    },
+    {
+      "kind": "space",
+      "text": " ",
+    },
+    {
+      "kind": "punctuation",
+      "text": "|",
+    },
+    {
+      "kind": "space",
+      "text": " ",
+    },
+    {
+      "kind": "keyword",
+      "text": "null",
+    },
+    {
+      "kind": "space",
+      "text": " ",
+    },
+    {
+      "kind": "punctuation",
+      "text": "|",
+    },
+    {
+      "kind": "space",
+      "text": " ",
+    },
+    {
+      "kind": "keyword",
+      "text": "undefined",
+    },
+    {
+      "kind": "punctuation",
+      "text": ",",
+    },
+    {
+      "kind": "space",
+      "text": " ",
+    },
+    {
+      "kind": "parameterName",
+      "text": "predicate",
+    },
+    {
+      "kind": "punctuation",
+      "text": "?",
+    },
+    {
+      "kind": "punctuation",
+      "text": ":",
+    },
+    {
+      "kind": "space",
+      "text": " ",
+    },
+    {
+      "kind": "aliasName",
+      "text": "ListIteratee",
+    },
+    {
+      "kind": "punctuation",
+      "text": "<",
+    },
+    {
+      "kind": "typeParameterName",
+      "text": "T",
+    },
+    {
+      "kind": "punctuation",
+      "text": ">",
+    },
+    {
+      "kind": "punctuation",
+      "text": ")",
+    },
+    {
+      "kind": "punctuation",
+      "text": ":",
+    },
+    {
+      "kind": "space",
+      "text": " ",
+    },
+    {
+      "kind": "typeParameterName",
+      "text": "T",
+    },
+    {
+      "kind": "punctuation",
+      "text": "[",
+    },
+    {
+      "kind": "punctuation",
+      "text": "]",
+    },
+    {
+      "kind": "lineBreak",
+      "text": "
+",
+    },
+    {
+      "kind": "keyword",
+      "text": "import",
+    },
+    {
+      "kind": "space",
+      "text": " ",
+    },
+    {
+      "kind": "aliasName",
+      "text": "dropWhile",
     },
   ],
-  "documentation": [],
-  "kind": "module",
+  "documentation": [
+    {
+      "kind": "text",
+      "text": "Creates a slice of array excluding elements dropped from the beginning. Elements are dropped until predicate
+returns falsey. The predicate is invoked with three arguments: (value, index, array).",
+    },
+  ],
+  "kind": "alias",
   "kindModifiers": "declare",
-  "tags": undefined,
+  "tags": [
+    {
+      "name": "param",
+      "text": [
+        {
+          "kind": "parameterName",
+          "text": "array",
+        },
+        {
+          "kind": "space",
+          "text": " ",
+        },
+        {
+          "kind": "text",
+          "text": "The array to query.",
+        },
+      ],
+    },
+    {
+      "name": "param",
+      "text": [
+        {
+          "kind": "parameterName",
+          "text": "predicate",
+        },
+        {
+          "kind": "space",
+          "text": " ",
+        },
+        {
+          "kind": "text",
+          "text": "The function invoked per iteration.",
+        },
+      ],
+    },
+    {
+      "name": "return",
+      "text": [
+        {
+          "kind": "text",
+          "text": "Returns the slice of array.",
+        },
+      ],
+    },
+  ],
   "textSpan": {
-    "length": 8,
-    "start": 18,
+    "length": 9,
+    "start": 9,
   },
 }
 `;
@@ -32,17 +263,179 @@ exports[`ata > non-prefixed lodash acquisition 2`] = `
   {
     "containerKind": undefined,
     "containerName": "",
-    "failedAliasResolution": false,
-    "fileName": "/node_modules/@types/lodash/index.d.ts",
+    "failedAliasResolution": undefined,
+    "fileName": "/node_modules/@types/lodash/common/array.d.ts",
     "isAmbient": true,
     "isLocal": false,
-    "kind": "module",
-    "name": ""/node_modules/@types/lodash/index"",
+    "kind": "type parameter",
+    "name": "T",
     "textSpan": {
-      "length": 221,
-      "start": 547,
+      "length": 1,
+      "start": 11611,
+    },
+    "unverified": false,
+  },
+  {
+    "containerKind": undefined,
+    "containerName": "",
+    "contextSpan": {
+      "length": 12393,
+      "start": 57359,
+    },
+    "failedAliasResolution": undefined,
+    "fileName": "/lib.es5.d.ts",
+    "isAmbient": true,
+    "isLocal": false,
+    "kind": "var",
+    "name": "Array",
+    "textSpan": {
+      "length": 5,
+      "start": 57369,
+    },
+    "unverified": false,
+  },
+  {
+    "containerKind": undefined,
+    "containerName": "",
+    "contextSpan": {
+      "length": 36,
+      "start": 70064,
+    },
+    "failedAliasResolution": undefined,
+    "fileName": "/lib.es5.d.ts",
+    "isAmbient": true,
+    "isLocal": false,
+    "kind": "var",
+    "name": "Array",
+    "textSpan": {
+      "length": 5,
+      "start": 70076,
+    },
+    "unverified": false,
+  },
+  {
+    "containerKind": undefined,
+    "containerName": "",
+    "contextSpan": {
+      "length": 2665,
+      "start": 853,
+    },
+    "failedAliasResolution": undefined,
+    "fileName": "/lib.es2015.core.d.ts",
+    "isAmbient": true,
+    "isLocal": false,
+    "kind": "var",
+    "name": "Array",
+    "textSpan": {
+      "length": 5,
+      "start": 863,
+    },
+    "unverified": false,
+  },
+  {
+    "containerKind": undefined,
+    "containerName": "",
+    "contextSpan": {
+      "length": 420,
+      "start": 2710,
+    },
+    "failedAliasResolution": undefined,
+    "fileName": "/lib.es2015.iterable.d.ts",
+    "isAmbient": true,
+    "isLocal": false,
+    "kind": "var",
+    "name": "Array",
+    "textSpan": {
+      "length": 5,
+      "start": 2720,
+    },
+    "unverified": false,
+  },
+  {
+    "containerKind": undefined,
+    "containerName": "",
+    "contextSpan": {
+      "length": 355,
+      "start": 853,
+    },
+    "failedAliasResolution": undefined,
+    "fileName": "/lib.es2016.array.include.d.ts",
+    "isAmbient": true,
+    "isLocal": false,
+    "kind": "var",
+    "name": "Array",
+    "textSpan": {
+      "length": 5,
+      "start": 863,
+    },
+    "unverified": false,
+  },
+  {
+    "containerKind": undefined,
+    "containerName": "",
+    "contextSpan": {
+      "length": 1010,
+      "start": 2152,
+    },
+    "failedAliasResolution": undefined,
+    "fileName": "/lib.es2019.array.d.ts",
+    "isAmbient": true,
+    "isLocal": false,
+    "kind": "var",
+    "name": "Array",
+    "textSpan": {
+      "length": 5,
+      "start": 2162,
+    },
+    "unverified": false,
+  },
+  {
+    "containerKind": undefined,
+    "containerName": "",
+    "contextSpan": {
+      "length": 252,
+      "start": 853,
+    },
+    "failedAliasResolution": undefined,
+    "fileName": "/lib.es2022.array.d.ts",
+    "isAmbient": true,
+    "isLocal": false,
+    "kind": "var",
+    "name": "Array",
+    "textSpan": {
+      "length": 5,
+      "start": 863,
     },
     "unverified": false,
   },
 ]
 `;
+
+exports[`ata > npm prefix 1`] = `
+{
+  "displayParts": [
+    {
+      "kind": "keyword",
+      "text": "import",
+    },
+    {
+      "kind": "space",
+      "text": " ",
+    },
+    {
+      "kind": "aliasName",
+      "text": "dropWhile",
+    },
+  ],
+  "documentation": [],
+  "kind": "alias",
+  "kindModifiers": "",
+  "tags": undefined,
+  "textSpan": {
+    "length": 9,
+    "start": 9,
+  },
+}
+`;
+
+exports[`ata > npm prefix 2`] = `undefined`;

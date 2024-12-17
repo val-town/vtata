@@ -4,34 +4,17 @@ import {
 	getFiletreeForModuleWithVersion,
 	getNPMVersionForModuleReference,
 	getNPMVersionsForModule,
-} from "./apis";
+} from "./jsdelivr";
 import { mapModuleNameToModule } from "./edgeCases";
-
-export interface ATABootstrapConfig {
-	/** A object you pass in to get callbacks */
-	delegate: {
-		/** The callback which gets called when ATA decides a file needs to be written to your VFS  */
-		receivedFile?: (code: string, path: string) => void;
-		/** A way to display progress */
-		progress?: (downloaded: number, estimatedTotal: number) => void;
-		/** Note: An error message does not mean ATA has stopped! */
-		errorMessage?: (userFacingMessage: string, error: Error) => void;
-		/** A callback indicating that ATA actually has work to do */
-		started?: () => void;
-		/** The callback when all ATA has finished */
-		finished?: (files: Map<string, string>) => void;
-	};
-	/** Passed to fetch as the user-agent */
-	projectName: string;
-	/** Your local copy of typescript */
-	typescript: typeof import("typescript");
-	/** If you need a custom version of fetch */
-	fetcher?: typeof fetch;
-	/** If you need a custom logger instead of the console global */
-	logger?: Logger;
-}
-
-type ModuleMeta = { state: "loading" };
+import type {
+	ModuleMeta,
+	ATABootstrapConfig,
+	ATADownload,
+	ModuleEntryStage0,
+	ModuleEntryStage1,
+} from "./types";
+import { getModuleType } from "./moduleTypes";
+import { makeShim } from "./shim";
 
 /**
  * The function which starts up type acquisition,
@@ -49,17 +32,22 @@ export const setupTypeAcquisition = (config: ATABootstrapConfig) => {
 	let estimatedToDownload = 0;
 	let estimatedDownloaded = 0;
 
-	return (initialSourceFile: string) => {
+	return async (initialSourceFile: string) => {
 		estimatedToDownload = 0;
 		estimatedDownloaded = 0;
 
-		return resolveDeps(initialSourceFile, 0).then((t) => {
-			if (estimatedDownloaded > 0) {
-				config.delegate.finished?.(fsMap);
-			}
-		});
+		const stats = await resolveDeps(initialSourceFile, 0);
+
+		if (estimatedDownloaded > 0) {
+			config.delegate.finished?.(fsMap);
+		}
+
+		return stats;
 	};
 
+	/**
+	 * NOTE: This is recursive!
+	 */
 	async function resolveDeps(initialSourceFile: string, depth: number) {
 		const depsToGet = getNewDependencies(config, moduleMap, initialSourceFile);
 
@@ -118,9 +106,12 @@ export const setupTypeAcquisition = (config: ATABootstrapConfig) => {
 		// Grab the package.jsons for each dependency
 		for (const tree of treesOnly) {
 			let prefix = `/node_modules/${tree.moduleName}`;
+			const prefixWithProtocol = `/node_modules/npm:${tree.moduleName}`;
 			if (dtTreesOnly.includes(tree))
 				prefix = `/node_modules/@types/${getDTName(tree.moduleName).replace("types__", "")}`;
 			const path = `${prefix}/package.json`;
+			const npmPath = `${prefixWithProtocol}/package.json`;
+			const shimPath = `${prefixWithProtocol}/__shim.d.ts`;
 			const pkgJSON = await getDTSFileForModuleWithVersion(
 				config,
 				tree.moduleName,
@@ -131,6 +122,23 @@ export const setupTypeAcquisition = (config: ATABootstrapConfig) => {
 			if (typeof pkgJSON === "string") {
 				fsMap.set(path, pkgJSON);
 				config.delegate.receivedFile?.(pkgJSON, path);
+
+				/**
+				 * NOTE: this is part of the vata modifications. Deno supports
+				 * importing NPM modules with an `npm:` prefix. Our approach to supporting
+				 * those prefixes is:
+				 *
+				 * When we see npm:foo, we download the npm package foo, but while downloading
+				 * it, we always add an alias from npm:foo to foo, which is a shim: a
+				 * .d.ts file that just re-exports from one file to another.
+				 */
+				fsMap.set(npmPath, pkgJSON);
+				config.delegate.receivedFile?.(pkgJSON, npmPath);
+
+				config.delegate.receivedFile?.(
+					makeShim("npm:lodash", "lodash"),
+					"/types/shims.d.ts",
+				);
 			} else {
 				config.logger?.error(
 					`Could not download package.json for ${tree.moduleName}`,
@@ -170,13 +178,6 @@ export const setupTypeAcquisition = (config: ATABootstrapConfig) => {
 	}
 };
 
-type ATADownload = {
-	moduleName: string;
-	moduleVersion: string;
-	vfsPath: string;
-	path: string;
-};
-
 function treeToDTSFiles(tree: NPMTreeMeta, vfsPrefix: string) {
 	const dtsRefs: ATADownload[] = [];
 
@@ -200,7 +201,7 @@ function treeToDTSFiles(tree: NPMTreeMeta, vfsPrefix: string) {
 export const getReferencesForModule = (
 	ts: typeof import("typescript"),
 	code: string,
-) => {
+): ModuleEntryStage0[] => {
 	const meta = ts.preProcessFile(code);
 
 	// Ensure we don't try download TypeScript lib references
@@ -225,7 +226,8 @@ export const getReferencesForModule = (
 		}
 
 		return {
-			module: r.fileName,
+			originalModuleName: r.fileName,
+			type: getModuleType(r.fileName),
 			version,
 		};
 	});
@@ -237,15 +239,19 @@ export function getNewDependencies(
 	moduleMap: Map<string, ModuleMeta>,
 	code: string,
 ) {
-	const refs = getReferencesForModule(config.typescript, code).map((ref) => ({
+	const refs: ModuleEntryStage1[] = getReferencesForModule(
+		config.typescript,
+		code,
+	).map((ref) => ({
 		...ref,
-		module: mapModuleNameToModule(ref.module),
+		module: mapModuleNameToModule(ref.originalModuleName),
 	}));
 
 	// Drop relative paths because we're getting all the files
 	const modules = refs
 		.filter((f) => !f.module.startsWith("."))
 		.filter((m) => !moduleMap.has(m.module));
+
 	return modules;
 }
 
@@ -308,13 +314,6 @@ export const getFileTreeForModuleWithTag = async (
 
 	return res;
 };
-
-interface Logger {
-	log: (...args: any[]) => void;
-	error: (...args: any[]) => void;
-	groupCollapsed: (...args: any[]) => void;
-	groupEnd: (...args: any[]) => void;
-}
 
 // Taken from dts-gen: https://github.com/microsoft/dts-gen/blob/master/lib/names.ts
 function getDTName(s: string) {

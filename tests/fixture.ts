@@ -6,7 +6,12 @@ async function reader(path: string) {
 	);
 	return {
 		fetch: (...args: any[]) => {
-			return Promise.resolve(new Response(new Blob([m.get(args[0])!])));
+			const r = m.get(args[0]);
+			if (!r) {
+				console.error("Missing fixture for a request against", ...args);
+				throw new Error("Missing fixture");
+			}
+			return Promise.resolve(new Response(new Blob([r])));
 		},
 		async save() {},
 	};
@@ -17,6 +22,7 @@ function recorder(path: string) {
 	return {
 		fetch: (...args: Parameters<typeof fetch>) => {
 			const url = args[0];
+			console.info("Fixture fetching", url);
 			return fetch(...args).then((r) => {
 				if (typeof url === "string") {
 					recordings.push(

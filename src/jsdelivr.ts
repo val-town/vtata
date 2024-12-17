@@ -1,6 +1,10 @@
-import type { ATABootstrapConfig } from ".";
+import type { ATABootstrapConfig } from "./types";
 
 //  https://github.com/jsdelivr/data.jsdelivr.com
+
+/**
+ * This file is called apis.ts in ata
+ */
 
 export const getNPMVersionsForModule = (
 	config: ATABootstrapConfig,

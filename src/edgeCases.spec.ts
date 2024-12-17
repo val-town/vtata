@@ -22,7 +22,7 @@ describe(mapModuleNameToModule, () => {
 		);
 	});
 
-	it("does not mess with the npm prefix", () => {
-		expect(mapModuleNameToModule("npm:fs")).toEqual("npm:fs");
+	it("removes the npm: prefix", () => {
+		expect(mapModuleNameToModule("npm:fs")).toEqual("fs");
 	});
 });
