@@ -1,15 +1,15 @@
 .quick-info-punctuation {
-  color: #ccc;
+	color: #ccc;
 }
 
 .quick-info-functionName {
-  color: indigo;
+	color: indigo;
 }
 
 .quick-info-keyword {
-  color: blue;
+	color: blue;
 }
 
 .quick-info-parameterName {
-  color: green;
+	color: green;
 }
