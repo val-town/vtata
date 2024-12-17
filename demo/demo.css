@@ -1,0 +1,15 @@
+.quick-info-punctuation {
+  color: #ccc;
+}
+
+.quick-info-functionName {
+  color: indigo;
+}
+
+.quick-info-keyword {
+  color: blue;
+}
+
+.quick-info-parameterName {
+  color: green;
+}
