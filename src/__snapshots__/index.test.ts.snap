@@ -1,0 +1,48 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ata > non-prefixed lodash acquisition 1`] = `
+{
+  "displayParts": [
+    {
+      "kind": "keyword",
+      "text": "module",
+    },
+    {
+      "kind": "space",
+      "text": " ",
+    },
+    {
+      "kind": "stringLiteral",
+      "text": ""/node_modules/@types/lodash/index"",
+    },
+  ],
+  "documentation": [],
+  "kind": "module",
+  "kindModifiers": "declare",
+  "tags": undefined,
+  "textSpan": {
+    "length": 8,
+    "start": 18,
+  },
+}
+`;
+
+exports[`ata > non-prefixed lodash acquisition 2`] = `
+[
+  {
+    "containerKind": undefined,
+    "containerName": "",
+    "failedAliasResolution": false,
+    "fileName": "/node_modules/@types/lodash/index.d.ts",
+    "isAmbient": true,
+    "isLocal": false,
+    "kind": "module",
+    "name": ""/node_modules/@types/lodash/index"",
+    "textSpan": {
+      "length": 221,
+      "start": 547,
+    },
+    "unverified": false,
+  },
+]
+`;

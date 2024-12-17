@@ -2,60 +2,10 @@ import { describe, expect, it } from "vitest";
 import * as ts from "typescript";
 import { getEnv } from "../tests/env";
 import { setupTypeAcquisition } from ".";
-import * as Fs from "node:fs/promises";
-
-async function reader(path: string) {
-	const m = new Map<string, string>(
-		JSON.parse(await Fs.readFile(path, "utf8")),
-	);
-	return {
-		fetch: (...args: any[]) => {
-			return Promise.resolve(new Response(new Blob([m.get(args[0])!])));
-		},
-		async save() {},
-	};
-}
-
-function recorder(path: string) {
-	const recordings: Promise<[string, string]>[] = [];
-	return {
-		fetch: (...args: Parameters<typeof fetch>) => {
-			const url = args[0];
-			return fetch(...args).then((r) => {
-				if (typeof url === "string") {
-					recordings.push(
-						r
-							.clone()
-							.text()
-							.then((text) => {
-								return [url, text];
-							}),
-					);
-				} else {
-					console.error("Non-string URL provided unexpectedly");
-				}
-				return r;
-			});
-		},
-		recordings,
-		async save() {
-			await Fs.writeFile(path, JSON.stringify(await Promise.all(recordings)));
-		},
-	};
-}
-
-/**
- * Using msw is probably the right thing to do, but there isn't an easy
- * mode for recording & replaying Node-native fetch calls. This is that.
- * It will probably need to be extended with the ability to communicate
- * headers and such in the future.
- */
-async function fixture(path: string, mode: "read" | "write") {
-	return await (mode === "read" ? reader(path) : recorder(path));
-}
+import { fixture } from "../tests/fixture";
 
 describe("ata", () => {
-	it("base", async () => {
+	it("non-prefixed lodash acquisition", async () => {
 		const env = getEnv();
 
 		let finish: (value?: unknown) => unknown;
@@ -73,7 +23,6 @@ describe("ata", () => {
 			delegate: {
 				receivedFile: (code: string, path: string) => {
 					env.createFile(path, code);
-					// Add code to your runtime at the path...
 				},
 				started: () => {
 					console.log("ATA start");
@@ -88,9 +37,22 @@ describe("ata", () => {
 			},
 		});
 
-		ata('import { x } from "lodash"');
+		const code = 'import { x } from "lodash"';
+		const path = "index.ts";
+		env.createFile(path, code);
+		ata(code);
 
 		await expect(finishedPromise).resolves.toBeFalsy();
 		await rec.save();
+
+		const sourcePos = code.indexOf("l") + 3;
+
+		expect(
+			env.languageService.getQuickInfoAtPosition(path, sourcePos),
+		).toMatchSnapshot();
+
+		expect(
+			env.languageService.getTypeDefinitionAtPosition(path, sourcePos),
+		).toMatchSnapshot();
 	});
 });
