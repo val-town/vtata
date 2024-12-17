@@ -1,11 +1,10 @@
 {
-	"name": "@typescript/ata",
-	"version": "0.9.7",
+	"name": "@valtown/vtata",
+	"version": "0.0.0",
 	"license": "MIT",
-	"homepage": "https://github.com/microsoft/TypeScript-Website",
+	"homepage": "https://github.com/val-town/vtata",
 	"repository": {
-		"url": "https://github.com/microsoft/TypeScript-Website.git",
-		"directory": "packages/ata",
+		"url": "https://github.com/val-town/vtata.git",
 		"type": "git"
 	},
 	"main": "dist/index.js",
