@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { mapModuleNameToModule } from "../src/edgeCases";
+import { mapModuleNameToModule } from "./edgeCases";
 
 describe(mapModuleNameToModule, () => {
 	it("gives node for known identifiers", () => {
@@ -20,5 +20,9 @@ describe(mapModuleNameToModule, () => {
 		expect(mapModuleNameToModule("@org/lodash/identity")).toEqual(
 			"@org/lodash",
 		);
+	});
+
+	it("does not mess with the npm prefix", () => {
+		expect(mapModuleNameToModule("npm:fs")).toEqual("npm:fs");
 	});
 });

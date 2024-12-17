@@ -74,6 +74,7 @@ export const setupTypeAcquisition = (config: ATABootstrapConfig) => {
 				getFileTreeForModuleWithTag(config, f.module, f.version),
 			),
 		);
+
 		const treesOnly = trees.filter((t) => !("error" in t)) as NPMTreeMeta[];
 
 		// These are the modules which we can grab directly
