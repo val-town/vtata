@@ -5,7 +5,6 @@ import { setupTypeAcquisition } from ".";
 import * as Fs from "node:fs/promises";
 
 async function reader(path: string) {
-	const recordings: Promise<{ url: string; text: string }>[] = [];
 	const m = new Map<string, string>(
 		JSON.parse(await Fs.readFile(path, "utf8")),
 	);
