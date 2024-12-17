@@ -1,8 +1,29 @@
-
 # vtata
 
 This is a fork of [`ata`](https://github.com/microsoft/TypeScript-Website/tree/v2/packages/ata),
 which is maintained as part of TypeScript-Website and licensed MIT. Most of this is that original package, currently!
+
+Why fork the original package? Well, the biggest reason is _Deno_.
+
+### Deno
+
+Deno supports importing from https URLs, it wants your NPM imports to
+start with `npm:`, and also supports `jsr:` imports, and those HTTPS imports
+can recursively import from other HTTPS imports. TypeScript doesn't
+support [any of those things](https://github.com/microsoft/TypeScript/issues/35749),
+at all.
+
+Deno’s LSP works because it contains a lot of hacks and workarounds. This implementation of ATA attempts to replicate most of that.
+
+#### FAQ
+
+- **Why not use Deno’s LSP?** It's in Rust, and calls into TypeScript,
+  and relies on Deno. As a result it's probably quite hard to run as a client-side
+  web library, and would be a very large binary as WASM. You can run it on
+  the server and use the LSP protocol - we're considering doing so -
+  but that levels up your server’s requirements and adds network lag to editing.
+
+---
 
 # TypeScript - Automatic Type Acquisition
 
