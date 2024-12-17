@@ -19,6 +19,11 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 9
+          run_install: false
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -26,15 +31,8 @@ jobs:
           node-version: 22
           cache: 'pnpm'
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
-        with:
-          version: 9
-          run_install: false
-
       - name: Install dependencies
         run: pnpm install
-
 
       - name: Build project
         run: pnpm build
