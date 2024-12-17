@@ -32,8 +32,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - run: npm run typecheck
-      - run: npm run test
+      - run: pnpm test
       - name: 'Report Coverage'
         # Set if: always() to also generate the report if tests are failing
         # Only works if you set `reportOnFailure: true` in your vite config as specified above
